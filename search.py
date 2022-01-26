@@ -119,11 +119,13 @@ def breadthFirstSearch(problem):
 
     while(queue.isEmpty != True):
         paths, node = queue.pop()
+        print("node is {}".format(node))
         if(problem.isGoalState(node)):
             return paths
         if node not in visited:
             visited.append(node)
             for successor, path, _ in problem.getSuccessors(node):
+                print("The path is {}".format(paths+ [path]) )
                 queue.push((paths + [path], successor))
     return None
 

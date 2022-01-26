@@ -288,21 +288,31 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
+        self.gameState = self.startingPosition
 
     def getStartState(self):
         """
         Returns the start state (in your state space, not the full Pacman state
         space)
         """
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        started_state = (self.gameState, [])
+        return started_state
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # the goal state is to check if the pacman has already visited the four corners
+        current_node, visited_cornerCells = state
+        if current_node in self.corners:
+            if current_node not in visited_cornerCells:
+                visited_cornerCells.append(current_node)
+                # it ensures the all the last cells/corners 
+                # has been visited to achieve the goal state in the game
+            if(len(visited_cornerCells) == 4): return True
+        return False
+
 
     def getSuccessors(self, state):
         """
@@ -318,6 +328,9 @@ class CornersProblem(search.SearchProblem):
         successors = []
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
+            
+            # understand the logic to figure out the new position is hitting the wall 
+
             # Here's a code snippet for figuring out whether a new position hits a wall:
             #   x,y = currentPosition
             #   dx, dy = Actions.directionToVector(action)
@@ -325,8 +338,24 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
+            # translation of the above hint
+            ((x, y), _) = state
+           
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            hitsWall = self.walls[nextx][nexty]
 
-        self._expanded += 1 # DO NOT CHANGE
+            "*** YOUR CODE HERE ***"
+            if (hitsWall == False):
+                visitedCorners = list(state[1])  # Visited Corners
+                nextState = (nextx, nexty)
+                if nextState in self.corners:
+                    if nextState not in visitedCorners: 
+                        visitedCorners.append(nextState)
+                successor = ((nextState, visitedCorners), action, 1)  # New state for successor.
+                successors.append(successor)  # Adding to successors list.
+
+        self._expanded += 1  # DO NOT CHANGE
         return successors
 
     def getCostOfActions(self, actions):
