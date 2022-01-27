@@ -389,7 +389,26 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
+    visited = []
+    current = problem.getStartState()
+    pqueue = util.PriorityQueue()
+    # push the path, node and cost
+    pqueue.push(([], current, 0), 0)
+    # rmwa
+    while(pqueue.isEmpty() != True):
+        (paths, node, cost) = pqueue.pop()
+        if(node in corners):
+            return paths
+        if(node not in visited):
+            visited.append(node)
+            neighbours = problem.getSuccessors(node)
+            for neighbour in neighbours:
+                (successor, path, scost) = neighbour
+                new_cost = cost + scost
+                priority = new_cost
+                pqueue.push((paths + [path] ,successor, priority), priority)
     return 0 # Default to trivial solution
+
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
