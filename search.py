@@ -119,14 +119,12 @@ def breadthFirstSearch(problem):
 
     while(queue.isEmpty() != True):
         paths, node = queue.pop()
-        print("node is {}".format(node))
         if(problem.isGoalState(node)):
             return paths
         if node not in visited:
             visited.append(node)
             for neighbour in problem.getSuccessors(node):
                 (successor, path, _) = neighbour
-                print("The path is {}".format(paths+ [path]) )
                 queue.push((paths + [path], successor))
     return None
 
@@ -167,7 +165,6 @@ def nullHeuristic(state, problem=None):
 # Do whole lot of less work because of the informed search ucs + heurstic function.
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
     visited = []
     current = problem.getStartState()
     initial_heuristic_val = heuristic(current, problem)
@@ -177,8 +174,10 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 
     while(pqueue.isEmpty() != True):
         (paths, node, cost) = pqueue.pop()
+
         if(problem.isGoalState(node)):
             return paths
+
         if(node not in visited):
             visited.append(node)
             neighbours = problem.getSuccessors(node)
@@ -188,8 +187,6 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                 new_cost = problem.getCostOfActions(paths + [path]) + initial_heuristic_val
                 priority = new_cost
                 pqueue.push((paths + [path] ,successor, priority), priority)
-
-    return None
 
 
 # Abbreviations

@@ -34,6 +34,12 @@ description for details.
 Good luck and happy searching!
 """
 
+from argparse import Action
+from dis import dis
+from operator import ne
+from os import stat
+from re import S
+from turtle import pos, position, st
 from game import Directions
 from game import Agent
 from game import Actions
@@ -372,6 +378,7 @@ class CornersProblem(search.SearchProblem):
         return len(actions)
 
 
+# problems with this heuristic estimations
 def cornersHeuristic(state, problem):
     """
     A heuristic for the CornersProblem that you defined.
@@ -389,25 +396,13 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
     "*** YOUR CODE HERE ***"
-    visited = []
-    current = problem.getStartState()
-    pqueue = util.PriorityQueue()
-    # push the path, node and cost
-    pqueue.push(([], current, 0), 0)
-    # rmwa
-    while(pqueue.isEmpty() != True):
-        (paths, node, cost) = pqueue.pop()
-        if(node in corners):
-            return paths
-        if(node not in visited):
-            visited.append(node)
-            neighbours = problem.getSuccessors(node)
-            for neighbour in neighbours:
-                (successor, path, scost) = neighbour
-                new_cost = cost + scost
-                priority = new_cost
-                pqueue.push((paths + [path] ,successor, priority), priority)
-    return 0 # Default to trivial solution
+    position = state[0]
+    distance = float('inf')
+    for corner in corners:
+        distance_value = util.manhattanDistance(corner, position)
+        if(distance_value < distance):
+            distance = distance_value
+    return distance_value # Default to trivial solution
 
 
 class AStarCornersAgent(SearchAgent):
@@ -500,9 +495,14 @@ def foodHeuristic(state, problem):
     Subsequent calls to this heuristic can access
     problem.heuristicInfo['wallCount']
     """
+    
     position, foodGrid = state
-    "*** YOUR CODE HERE ***"
-    return 0
+    food_list = foodGrid.asList()
+    estimated_value = 0
+    for food_coordinate in food_list:
+        distance = util.manhattanDistance(position, food_coordinate)
+        estimated_value = max(estimated_value, distance)
+    return estimated_value
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
