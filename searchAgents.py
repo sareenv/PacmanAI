@@ -40,7 +40,7 @@ from operator import ne
 from os import stat
 from re import S
 from turtle import pos, position, st
-from game import Directions
+from game import Directions, Game
 from game import Agent
 from game import Actions
 import util
@@ -395,14 +395,29 @@ def cornersHeuristic(state, problem):
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
 
-    "*** YOUR CODE HERE ***"
-    position = state[0]
-    distance = float('inf')
+    # the objective is to develop the admissible heuristic 
+    # - meaning it should be never overestimate the distance from the src to the goal state 
+    # - but it needs to be effective also to give more informed results.
+    # - shortest path from the src to the goal state which is visiting all the corners.
+    position, neighbours = state
+    unvisited_corner = []
+    estimated_value = 0
+    # In case we have already at the goal state - return 0 as the estimated value.
+    if(problem.isGoalState(state)):
+        return estimated_value
+
+    distance_list = []
+    # Appending all the unvisited corners.
     for corner in corners:
-        distance_value = util.manhattanDistance(corner, position)
-        if(distance_value < distance):
-            distance = distance_value
-    return distance_value # Default to trivial solution
+        if corner not in neighbours:
+            unvisited_corner.append(corner)
+    
+    for corner in unvisited_corner:
+        man_distance = util.manhattanDistance(position, corner)
+        distance_list.append(man_distance)
+    
+    estimated_value = max(distance_list)
+    return estimated_value
 
 
 class AStarCornersAgent(SearchAgent):
@@ -501,7 +516,8 @@ def foodHeuristic(state, problem):
     estimated_value = 0
     for food_coordinate in food_list:
         distance = util.manhattanDistance(position, food_coordinate)
-        estimated_value = max(estimated_value, distance)
+        if(distance > estimated_value):
+            estimated_value = distance
     return estimated_value
 
 class ClosestDotSearchAgent(SearchAgent):
