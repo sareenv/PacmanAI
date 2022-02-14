@@ -416,7 +416,7 @@ def cornersHeuristic(state, problem):
     for corner in unvisited_corner:
         man_distance = util.manhattanDistance(position, corner)
         distance_list.append(man_distance)
-        
+
     estimated_value = max(distance_list)
     return estimated_value
 
@@ -548,9 +548,8 @@ class ClosestDotSearchAgent(SearchAgent):
         food = gameState.getFood()
         walls = gameState.getWalls()
         problem = AnyFoodSearchProblem(gameState)
+        return search.ucs(problem)
 
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -584,9 +583,11 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         complete the problem definition.
         """
         x,y = state
-
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        foods_coordinates = self.food.asList();
+        if(state in foods_coordinates):
+            return True
+        return False
+            
 
 def mazeDistance(point1, point2, gameState):
     """
