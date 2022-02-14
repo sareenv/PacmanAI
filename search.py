@@ -89,7 +89,6 @@ def depthFirstSearch(problem):
     print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
-    "*** YOUR CODE HERE ***"
     vnodes = []  # shows the visited nodes.
     current = problem.getStartState()
 
@@ -106,7 +105,6 @@ def depthFirstSearch(problem):
                 stack.push((moves + [action], successor))
     return None
 
-    util.raiseNotDefined()
 
 
 def breadthFirstSearch(problem):
@@ -129,10 +127,10 @@ def breadthFirstSearch(problem):
     return None
 
 # Reference. - Learning the Search Algorithm.
-# https://www.youtube.com/watch?v=dRMvK76xQJI - Resource used to learn the concept of UCS.
+# https://www.youtube.com/watch?v=dRMvK76xQJI - 
+# Resource used to learn and understand the concept of UCS Algorithm.
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
-    "*** YOUR CODE HERE ***"
     visited = []
     current = problem.getStartState()
     pqueue = util.PriorityQueue()
