@@ -402,6 +402,7 @@ def cornersHeuristic(state, problem):
     position, neighbours = state
     unvisited_corner = []
     estimated_value = 0
+
     # In case we have already at the goal state - return 0 as the estimated value.
     if(problem.isGoalState(state)):
         return estimated_value
@@ -411,11 +412,11 @@ def cornersHeuristic(state, problem):
     for corner in corners:
         if corner not in neighbours:
             unvisited_corner.append(corner)
-    
+    # Calculating the distance from the current position to the unvisited corner
     for corner in unvisited_corner:
         man_distance = util.manhattanDistance(position, corner)
         distance_list.append(man_distance)
-    
+        
     estimated_value = max(distance_list)
     return estimated_value
 
